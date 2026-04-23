@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>ARG RIG</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<div class="shell">
+<div class="app">
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <div class="logo">⬡ <em>ARG</em>RIG</div>
+      <div class="logo-sub">Oil & Gas Upstream Analytics</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+      <div class="badge-live"><div class="ld"></div>LIVE</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dm)" id="prd-lbl">Mar 2026</div>
+    </div>
+  </div>
+</div>
+
+<div class="vtabs">
+  <div class="vt on" data-v="pozos">🔩</div>
+  <div class="vt" data-v="clientes">🏭</div>
+  <div class="vt" data-v="fractura">⚡</div>
+  <div class="vt" data-v="balance">⚖️</div>
+  <div class="vt" data-v="spend">💰</div>
+  <div class="vt" data-v="prod">📊</div>
+</div>
+
+<div class="gbar">
+  <button class="pp" data-g="p" data-v="1m">1M</button>
+  <button class="pp" data-g="p" data-v="3m">3M</button>
+  <button class="pp" data-g="p" data-v="6m">6M</button>
+  <button class="pp on" data-g="p" data-v="1a">1A</button>
+  <button class="pp" data-g="p" data-v="2a">2A</button>
+  <div class="gs"></div>
+  <button class="ch on" data-g="prov" data-v="todas" data-multi="true">Todas</button>
+  <button class="ch" data-g="prov" data-v="neuquen" data-multi="true">Neuquén</button>
+  <button class="ch" data-g="prov" data-v="chubut" data-multi="true">Chubut</button>
+  <button class="ch" data-g="prov" data-v="santacruz" data-multi="true">Santa Cruz</button>
+  <button class="ch" data-g="prov" data-v="mendoza" data-multi="true">Mendoza</button>
+  <div class="gs"></div>
+  <button class="ch on" data-g="rec" data-v="todos" data-multi="true">Todos</button>
+  <button class="ch" data-g="rec" data-v="shale" data-multi="true">Shale</button>
+  <button class="ch" data-g="rec" data-v="tight" data-multi="true">Tight</button>
+  <button class="ch" data-g="rec" data-v="conv" data-multi="true">Conv</button>
+</div>
+
+<!-- POZOS -->
+<div class="pg on" id="pg-pozos">
+<div class="scrl">
+  <div class="hero-card">
+    <div class="hero-top">
+      <div class="hero-lbl">Rig Count · prom. mensual</div>
+      <div class="hero-period" id="h-period">—</div>
+    </div>
+    <div class="hero-val" id="h-rigs">—</div>
+    <div class="hero-yoy">
+      <div class="yoy-badge yoy-nt" id="h-yoy-badge"><span id="h-yoy-arrow">—</span><span id="h-yoy-val">—</span></div>
+      <span class="hero-yoy-desc">vs mismo período año anterior</span>
+    </div>
+  </div>
+  <div class="lccard">
+    <div class="lc-hdr">
+      <span class="lc-title">Rigs activos + Pozos terminados</span>
+      <div class="lc-meta">
+        <div class="lc-leg"><div class="lc-dot" style="background:var(--or)"></div>Rigs</div>
+        <div class="lc-leg"><div class="lc-dot" style="background:var(--gn)"></div>Pozos</div>
+      </div>
+    </div>
+    <svg id="lc-svg" style="width:100%;display:block" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div class="mini-grid">
+    <div class="mini">
+      <div class="mini-accent" style="background:var(--gn)"></div>
+      <div class="mini-lbl">Pozos term. (Cap IV)</div>
+      <div class="mini-val" id="m-wells" style="color:var(--gn)">—</div>
+      <div class="mini-yoy"><span id="my-wells" class="up">—</span></div>
+      <div class="mini-spark"><svg id="ms-wells" viewBox="0 0 90 20" style="width:100%;height:18px" preserveAspectRatio="none"></svg></div>
+    </div>
+    <div class="mini">
+      <div class="mini-accent" style="background:var(--bl)"></div>
+      <div class="mini-lbl">Metros perf.</div>
+      <div class="mini-val" id="m-metros" style="color:var(--bl);font-size:24px">—</div>
+      <div class="mini-yoy"><span id="my-metros">—</span></div>
+      <div class="mini-spark"><svg id="ms-metros" viewBox="0 0 90 20" style="width:100%;height:18px" preserveAspectRatio="none"></svg></div>
+    </div>
+    <div class="mini">
+      <div class="mini-accent" style="background:var(--pu)"></div>
+      <div class="mini-lbl">No Conv %</div>
+      <div class="mini-val" id="m-shale" style="color:var(--pu)">—</div>
+      <div class="mini-yoy"><span class="nt" id="my-shale">—</span></div>
+    </div>
+    <div class="mini">
+      <div class="mini-accent" style="background:var(--am)"></div>
+      <div class="mini-lbl">Pozos/rig/mes</div>
+      <div class="mini-val" id="m-prod" style="color:var(--am);font-size:28px">—</div>
+      <div class="mini-yoy"><span class="nt" id="my-prod">—</span></div>
+    </div>
+  </div>
+  <div class="lm-strip">
+    <div class="lm-top">
+      <span class="lm-tag">Último mes · Mar 2026</span>
+      <span class="lm-source">GAPP / NCS / Cap IV</span>
+    </div>
+    <div class="lm-grid">
+      <div class="lm-it">
+        <div class="lm-v" id="lm-rigs" style="color:var(--or)">45</div>
+        <div class="lm-l">Rigs</div>
+        <div class="lm-d" id="lmd-rigs">—</div>
+      </div>
+      <div class="lm-it">
+        <div class="lm-v" id="lm-wells" style="color:var(--gn)">68</div>
+        <div class="lm-l">Pozos</div>
+        <div class="lm-d" id="lmd-wells">—</div>
+      </div>
+      <div class="lm-it">
+        <div class="lm-v" id="lm-etapas" style="color:var(--am)">2.371</div>
+        <div class="lm-l">Etapas</div>
+        <div class="lm-d" id="lmd-etapas">—</div>
+      </div>
+    </div>
+  </div>
+  <div class="sec"><span class="sec-t">Rigs por provincia</span><span class="sec-b" id="sb-prov">—</span></div>
+  <div class="barlist" id="bl-prov"></div>
+  <div style="height:8px"></div>
+</div>
+</div>
+
+<!-- CLIENTES -->
+<div class="pg" id="pg-clientes">
+<div class="scrl">
+  <div class="lccard" style="margin-top:8px">
+    <div class="lc-hdr">
+      <span class="lc-title">Rigs por operadora</span>
+      <div class="lc-meta" id="cli-legenda"></div>
+    </div>
+    <svg id="cli-lc-svg" style="width:100%;display:block" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div class="sec"><span class="sec-t">Ranking rigs activos</span><span class="sec-b" id="sb-rkrigs">—</span></div>
+  <div class="rkcard" id="rk-rigs"></div>
+  <div class="sec" style="margin-top:4px"><span class="sec-t">Productividad pozos/rig/mes</span><span class="sec-b" id="sb-prod-cli">—</span></div>
+  <div class="barlist" id="bl-prod-cli"></div>
+  <div style="height:8px"></div>
+</div>
+</div>
+
+<!-- FRACTURA -->
+<div class="pg" id="pg-fractura">
+<div class="scrl">
+  <div class="hero-card" style="border-color:rgba(245,166,35,.35);background:linear-gradient(145deg,rgba(245,166,35,.09),var(--s1))">
+    <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(245,166,35,.1),transparent 70%);border-radius:50%"></div>
+    <div class="hero-top">
+      <div class="hero-lbl" style="color:var(--am)">Etapas fractura · período</div>
+      <div class="hero-period" id="fh-period">—</div>
+    </div>
+    <div class="hero-val" id="fh-etapas" style="font-size:58px">—</div>
+    <div class="hero-yoy">
+      <div class="yoy-badge yoy-nt" id="fh-yoy-badge"><span id="fh-yoy-a">—</span><span id="fh-yoy-v">—</span></div>
+      <span class="hero-yoy-desc">vs mismo período año anterior</span>
+    </div>
+  </div>
+  <div class="mini-grid">
+    <div class="mini">
+      <div class="mini-accent" style="background:var(--or)"></div>
+      <div class="mini-lbl">Frac Sets prom.</div>
+      <div class="mini-val" id="fm-sets" style="color:var(--or)">—</div>
+      <div class="mini-yoy"><span id="fmy-sets">—</span></div>
+    </div>
+    <div class="mini">
+      <div class="mini-accent" style="background:var(--tl)"></div>
+      <div class="mini-lbl">Pico mensual</div>
+      <div class="mini-val" style="color:var(--tl);font-size:24px">2.588</div>
+      <div class="mini-yoy"><span class="nt">May 2025</span></div>
+    </div>
+    <div class="mini" style="grid-column:span 2">
+      <div class="mini-accent" style="background:var(--gn)"></div>
+      <div class="mini-lbl">Acumulado 2025 · No Convencional</div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between">
+        <div class="mini-val" style="color:var(--gn)">23.784<span class="u">et.</span></div>
+        <div class="yoy-badge yoy-up" style="margin-bottom:4px">▲ +34%</div>
+      </div>
+    </div>
+  </div>
+  <div class="lccard">
+    <div class="lc-hdr">
+      <span class="lc-title">Etapas de fractura mensual</span>
+      <div class="lc-meta"><div class="lc-leg"><div class="lc-dot" style="background:var(--am)"></div>Etapas totales</div></div>
+    </div>
+    <svg id="frac-lc-svg" style="width:100%;display:block" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div class="sec"><span class="sec-t">Etapas por operadora</span><span class="sec-b">Feb 2026 · NCS</span></div>
+  <div class="barlist" id="bl-frac-op"></div>
+  <div class="sec" style="margin-top:4px"><span class="sec-t">Ranking fractura</span><span class="sec-b">Feb 2026</span></div>
+  <div class="rkcard" id="rk-frac"></div>
+  <div style="height:8px"></div>
+</div>
+</div>
+
+<!-- BALANCE -->
+<div class="pg" id="pg-balance">
+<div class="scrl">
+  <div style="margin:8px 14px;padding:16px;background:var(--s1);border:1px solid var(--bdr);border-radius:16px">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--dm);margin-bottom:4px">
+      Equilibrio drilling vs frac capacity
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--mt);margin-bottom:12px">
+      Naranja: Rigs · Verde: Pozos term. · Amarilla: Etapas/rig activo
+    </div>
+    <svg id="balance-svg" style="width:100%;display:block" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div class="backlog-indicator">
+    <div class="bi-title">Balance Sets vs Rigs</div>
+    <div class="bi-bar">
+      <div class="bi-fill" id="bi-fill"></div>
+      <div class="bi-marker" id="bi-marker"></div>
+    </div>
+    <div class="bi-labels">
+      <span class="bi-lbl">Rigs exceso</span>
+      <span class="bi-lbl">Equilibrado</span>
+      <span class="bi-lbl">Sets exceso</span>
+    </div>
+    <div style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dm)" id="bi-msg">—</div>
+  </div>
+  <div class="mini-grid">
+    <div class="mini">
+      <div class="mini-accent" style="background:var(--or)"></div>
+      <div class="mini-lbl">Pozos/rig/mes</div>
+      <div class="mini-val" id="bal-pw" style="color:var(--or);font-size:28px">—</div>
+      <div class="mini-yoy"><span class="nt" id="bal-pw-sub">—</span></div>
+    </div>
+    <div class="mini">
+      <div class="mini-accent" style="background:var(--am)"></div>
+      <div class="mini-lbl">Ratio sets/rigs</div>
+      <div class="mini-val" id="bal-ratio" style="color:var(--am);font-size:28px">—</div>
+      <div class="mini-yoy"><span class="nt" id="bal-ratio-sub">—</span></div>
+    </div>
+  </div>
+  <div style="height:8px"></div>
+</div>
+</div>
+
+<!-- MARKET SPEND -->
+<div class="pg" id="pg-spend">
+<div class="scrl">
+  <div style="margin:8px 14px;padding:18px;background:var(--s1);border:1px solid var(--bdr);border-radius:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--dm)">
+          Well Spend · Res. 2057
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--mt);margin-top:2px">
+          DDJJ operadoras
+        </div>
+      </div>
+      <div style="display:flex;gap:4px">
+        <button class="ch" data-g="spend-yr" data-v="2024">2024</button>
+        <button class="ch" data-g="spend-yr" data-v="2025">2025</button>
+        <button class="ch on" data-g="spend-yr" data-v="2026">2026</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="background:var(--s2);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--or)" id="spend-total">—</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dm);margin-top:2px" id="spend-yr-lbl">—</div>
+      </div>
+      <div style="background:var(--s2);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gn)" id="spend-yoy-val">—</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dm);margin-top:2px" id="spend-yoy-lbl">—</div>
+      </div>
+    </div>
+  </div>
+  <div class="sec"><span class="sec-t">Inversión por zona</span><span class="sec-b" id="sb-spend-zona">—</span></div>
+  <div class="barlist" id="bl-spend-zona"></div>
+  <div class="sec" style="margin-top:4px"><span class="sec-t">Top operadoras · Well spend</span><span class="sec-b" id="sb-spend-ops">—</span></div>
+  <div class="rkcard" id="rk-spend"></div>
+  <div class="lccard" style="margin-top:8px">
+    <div class="lc-hdr">
+      <span class="lc-title">Evolución inversión upstream</span>
+      <div class="lc-meta"><div class="lc-leg"><div class="lc-dot" style="background:var(--or)"></div>USD MM</div></div>
+    </div>
+    <svg id="spend-lc-svg" style="width:100%;display:block" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div style="margin:8px 14px;padding:12px;background:var(--s2);border-radius:12px;border:1px solid var(--bdr)">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:var(--dm);line-height:1.5">
+      <b style="color:var(--tx)">Fuentes:</b> Resolución 2057 (Secretaría de Energía), DDJJ operadoras 2024-2026, IAPG Anuario.
+      Actualización anual. Próxima: Ago 2026.
+    </div>
+  </div>
+  <div style="height:8px"></div>
+</div>
+</div>
+
+<!-- PRODUCCIÓN -->
+<div class="pg" id="pg-prod">
+<div class="scrl">
+  <div style="margin:8px 14px;padding:16px;background:var(--s1);border:1px solid var(--bdr);border-radius:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--dm)">
+        Producción · Mar 2026
+      </span>
+      <div style="display:flex;gap:6px">
+        <button class="ch on" data-g="fluid" data-v="todos">Ambos</button>
+        <button class="ch" data-g="fluid" data-v="oil">Oil</button>
+        <button class="ch" data-g="fluid" data-v="gas">Gas</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="background:var(--s2);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--or)" id="prod-oil-val">487k</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dm);margin-top:2px">bbl/d petróleo</div>
+      </div>
+      <div style="background:var(--s2);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--bl)" id="prod-gas-val">72</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dm);margin-top:2px">MMm³/d gas</div>
+      </div>
+    </div>
+  </div>
+  <div class="lccard">
+    <div class="lc-hdr">
+      <span class="lc-title">Producción mensual</span>
+      <div class="lc-meta">
+        <div class="lc-leg"><div class="lc-dot" style="background:var(--or)"></div>Oil (k bbl/d)</div>
+        <div class="lc-leg"><div class="lc-dot" style="background:var(--bl)"></div>Gas (MMm³/d)</div>
+      </div>
+    </div>
+    <svg id="prod-lc-svg" style="width:100%;display:block" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div class="sec"><span class="sec-t">Producción por recurso</span><span class="sec-b" id="sb-prod-rec">Mar 2026</span></div>
+  <div class="barlist" id="bl-prod-rec"></div>
+  <div class="sec" style="margin-top:4px"><span class="sec-t">Top productores Oil</span><span class="sec-b">Mar 2026 · Cap IV</span></div>
+  <div class="rkcard" id="rk-prod-oil"></div>
+  <div style="height:8px"></div>
+</div>
+</div>
+
+<div class="bnav">
+  <div class="bni on" data-n="pozos"><div class="bni-dot"></div><div class="bni-i">🔩</div><div class="bni-l">Pozos</div></div>
+  <div class="bni" data-n="clientes"><div class="bni-dot"></div><div class="bni-i">🏭</div><div class="bni-l">Clientes</div></div>
+  <div class="bni" data-n="fractura"><div class="bni-dot"></div><div class="bni-i">⚡</div><div class="bni-l">Fractura</div></div>
+  <div class="bni" data-n="balance"><div class="bni-dot"></div><div class="bni-i">⚖️</div><div class="bni-l">Balance</div></div>
+  <div class="bni" data-n="spend"><div class="bni-dot"></div><div class="bni-i">💰</div><div class="bni-l">Spend</div></div>
+  <div class="bni" data-n="prod"><div class="bni-dot"></div><div class="bni-i">📊</div><div class="bni-l">Prod</div></div>
+</div>
+
+</div></div></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
+
